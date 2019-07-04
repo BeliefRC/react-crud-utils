@@ -10,7 +10,7 @@ export default class OperateBar extends Component {
 
   render () {
     return <div>
-<GenerateForm/>
+      <GenerateForm />
     </div>
   }
 }

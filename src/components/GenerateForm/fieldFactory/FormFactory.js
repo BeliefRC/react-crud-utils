@@ -1,15 +1,27 @@
 import React from 'react'
 import { Col, Form, Row } from 'antd'
 import FieldsFactory from './FieldsFactory'
+import { observable, action, runInAction } from 'mobx'
 
 export default class FormFactory {
+  constructor (formData, form) {
+    this.formData = formData
+    this.form = form
+  }
 
-  static create (data, form) {
-    const {getFieldDecorator, getFieldsError, getFieldError, isFieldTouched} =form
-    return data.map(field => {
+  disabledForm = () => {
+    this.formData = this.formData.map(item => {
+        item.disabled = true
+        return item
+      }
+    )
+  }
+
+  create = () => {
+    const {getFieldDecorator, getFieldsError, getFieldError, isFieldTouched} = this.form
+    return this.formData.map(field => {
       const Field = FieldsFactory.getField(field)
       const {id, label, type, rules, Component, ...props} = Field
-      console.log(Field)
       return <Col span={8} key={id}>
         <Form.Item label={label}>
           {getFieldDecorator(id, {
@@ -20,8 +32,7 @@ export default class FormFactory {
     })
   }
 
-  static generateForm (data, form) {
-    const {getFieldDecorator, getFieldsError, getFieldError, isFieldTouched} = form
+  render = () => {
     const formItemLayout = {
       labelCol: {
         xs: {span: 24},
@@ -33,11 +44,12 @@ export default class FormFactory {
       },
     }
     return <div className="generate-form">
-      <Form onSubmit={()=>{}} {...formItemLayout}>
+      <Form onSubmit={() => {}} {...formItemLayout}>
         <Row gutter={24}>
-          {FormFactory.create(data, form)}
+          {this.create()}
         </Row>
       </Form>
     </div>
   }
+
 }

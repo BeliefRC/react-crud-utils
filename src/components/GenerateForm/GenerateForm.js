@@ -55,8 +55,22 @@ const data = [
 
 @Form.create()
 export default class GenerateForm extends Component {
+  constructor (props) {
+    super(props)
+    this.formFactory = new FormFactory(data, this.props.form)
+  }
+
+  clickBtn = () => {
+    this.formFactory.disabledForm()
+    this.forceUpdate()
+  }
 
   render () {
-    return FormFactory.generateForm(data, this.props.form)
+    return <div>
+      {this.formFactory.render()
+      }
+      <button onClick={this.clickBtn}>button</button>
+    </div>
+
   }
 }
